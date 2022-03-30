@@ -2,5 +2,6 @@ name: Resources
 version: '${project.version}'
 main: exposed.hydrogen.resources.Resources
 api-version: 1.18
+load: STARTUP
 authors: [ Hydrogen ]
 description: Resource pack server using unnamed team's creative api

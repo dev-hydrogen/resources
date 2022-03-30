@@ -15,6 +15,7 @@ import java.security.NoSuchAlgorithmException;
 public class ResourcePackHandler {
     public static final Path RESOURCE_PACK_DIR = new File(Resources.getInstance().getDataFolder().getAbsolutePath() + "/temp/downloadedpack.zip").toPath();
     @Getter private ResourcePack resourcePack;
+    @Getter protected boolean isResourcePackDownloaded = false;
 
     /**
      * Resource pack handler constructor, downloads the resource pack and loads it as ResourcePack.

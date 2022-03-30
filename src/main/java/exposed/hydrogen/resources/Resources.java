@@ -37,10 +37,9 @@ public final class Resources extends JavaPlugin {
         }
 
         // https://stackoverflow.com/questions/2939218/getting-the-external-ip-address-in-java
-        BufferedReader in = null;
         try {
             URL whatismyip = new URL("http://checkip.amazonaws.com");
-            in = new BufferedReader(new InputStreamReader(
+            BufferedReader in = new BufferedReader(new InputStreamReader(
                     whatismyip.openStream()));
             publicIP = in.readLine();
         } catch (IOException e) {
@@ -48,17 +47,9 @@ public final class Resources extends JavaPlugin {
         }
         instance.getLogger().info("Public IP: " + publicIP);
 
-        Thread server = new Thread(() -> {
-            resourcePackServerHandler = new ResourcePackServerHandler(address, port.intValue(), resourcePackHandler);
-
-            this.getLogger().info("Resource pack server started. Address: " + resourcePackServerHandler.getServer().httpServer().getAddress());
-            // Disable server.properties resource pack
-            MinecraftServer.getServer().a("http://" + publicIP + ":" + port, "");
-        });
-
         if (resourcePackPath.isEmpty()) {
             this.getLogger().info("No server resource pack found");
-            server.start();
+            startResourcePackServer(address, port.intValue());
             return;
         }
 
@@ -76,7 +67,7 @@ public final class Resources extends JavaPlugin {
                 this.getLogger().log(java.util.logging.Level.SEVERE, "Failed to download resource pack.", e);
             }
             resourcePackHandler.isResourcePackDownloaded = true;
-            server.start();
+            startResourcePackServer(address, port.intValue());
         });
         download.start();
     }
@@ -92,6 +83,14 @@ public final class Resources extends JavaPlugin {
             resourcePackServerHandler.getServer().stop(2);
         });
         shutdownserver.start();
+    }
+
+    private void startResourcePackServer(String address, int port) {
+        resourcePackServerHandler = new ResourcePackServerHandler(address, port, resourcePackHandler);
+
+        this.getLogger().info("Resource pack server started. Address: " + resourcePackServerHandler.getServer().httpServer().getAddress());
+        // Disable server.properties resource pack
+        MinecraftServer.getServer().a("http://" + publicIP + ":" + port, "");
     }
 
 }

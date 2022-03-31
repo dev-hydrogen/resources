@@ -9,8 +9,8 @@ import java.io.IOException;
 
 public class ResourcePackServerHandler {
     @Getter private ResourcePackServer server;
-    @Getter private String address;
-    @Getter private int port;
+    @Getter private final String address;
+    @Getter private final int port;
     private ResourcePack pack;
 
     public ResourcePackServerHandler(String address, int port, ResourcePackHandler handler) {

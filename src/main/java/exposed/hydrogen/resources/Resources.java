@@ -5,10 +5,8 @@ import net.minecraft.server.MinecraftServer;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 
@@ -23,8 +21,8 @@ public final class Resources extends JavaPlugin {
         instance = this;
 
         this.saveDefaultConfig();
-        if (new File(this.getDataFolder().getAbsolutePath() + "/temp").mkdirs()) {
-            this.getLogger().info("Created temp folder");
+        if (new File(this.getDataFolder().getAbsolutePath() + "/pack").mkdirs()) {
+            this.getLogger().info("Created pack folder");
         }
 
         String address = getConfig().getString("address");
@@ -36,15 +34,7 @@ public final class Resources extends JavaPlugin {
             return;
         }
 
-        // https://stackoverflow.com/questions/2939218/getting-the-external-ip-address-in-java
-        try {
-            URL whatismyip = new URL("http://checkip.amazonaws.com");
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    whatismyip.openStream()));
-            publicIP = in.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        publicIP = Util.getPublicIP();
         instance.getLogger().info("Public IP: " + publicIP);
 
         if (resourcePackPath.isEmpty()) {
@@ -58,13 +48,13 @@ public final class Resources extends JavaPlugin {
             try {
                 resourcePackHandler = new ResourcePackHandler(new URL(resourcePackPath));
 
-                this.getLogger().info("Downloaded resource pack successfully.");
-                this.getLogger().info("Bukkit Hash:" + Bukkit.getResourcePackHash() + " " +
+                getLogger().info("Downloaded resource pack successfully.");
+                getLogger().info("Bukkit Hash:" + Bukkit.getResourcePackHash() + " " +
                         "| Resource Pack Hash:" + resourcePackHandler.getResourcePack().hash());
-                this.getLogger().info("Resource Pack Size: " + resourcePackHandler.getResourcePack().bytes().length + " bytes");
-                this.getLogger().info("Starting resource pack server...");
+                getLogger().info("Resource Pack Size: " + resourcePackHandler.getResourcePack().bytes().length + " bytes");
+                getLogger().info("Starting resource pack server...");
             } catch (IOException | NoSuchAlgorithmException e) {
-                this.getLogger().log(java.util.logging.Level.SEVERE, "Failed to download resource pack.", e);
+                getLogger().log(java.util.logging.Level.SEVERE, "Failed to download resource pack.", e);
             }
             resourcePackHandler.isResourcePackDownloaded = true;
             startResourcePackServer(address, port.intValue());
@@ -79,6 +69,7 @@ public final class Resources extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        // needs to be async or this would block the server during shutdown
         Thread shutdownserver = new Thread(() -> {
             resourcePackServerHandler.getServer().stop(2);
         });

@@ -14,7 +14,7 @@ import java.security.NoSuchAlgorithmException;
 
 
 public class ResourcePackHandler {
-    public static final Path RESOURCE_PACK_DIR = new File(Resources.getInstance().getDataFolder().getAbsolutePath() + "/temp/downloadedpack.zip").toPath();
+    public static final Path RESOURCE_PACK_DIR = new File(Resources.getInstance().getDataFolder().getAbsolutePath() + "/pack/downloadedpack.zip").toPath();
     @Getter @NotNull private ResourcePack resourcePack;
     @Getter protected boolean isResourcePackDownloaded = false;
     @Getter private byte[] hash;
@@ -31,15 +31,18 @@ public class ResourcePackHandler {
         resourcePack = new ResourcePack(new FileInputStream(RESOURCE_PACK_DIR.toFile()).readAllBytes(), Util.getSHA1Hash(RESOURCE_PACK_DIR.toFile()));
     }
 
-    public void setResourcePack(ResourcePack resourcePack) {
+    /**
+     * Sets the resource pack to the given resource pack. This will overwrite the current resource pack.
+     * @param resourcePack the resource pack to set
+     * @throws IOException if the resource pack could not be written to file, or if the resource pack is invalid
+     * @throws NoSuchAlgorithmException if the algorithm is not found (should never happen)
+     */
+    public void setResourcePack(ResourcePack resourcePack) throws IOException, NoSuchAlgorithmException {
         Validate.isTrue(resourcePack != null, "Resource pack cannot be null");
         this.resourcePack = resourcePack;
-        try {
-            Files.copy(new ByteArrayInputStream(resourcePack.bytes()), RESOURCE_PACK_DIR, StandardCopyOption.REPLACE_EXISTING);
-            Resources.getResourcePackServerHandler().setPack(resourcePack);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        hash = Util.getSHA1HashBytes(RESOURCE_PACK_DIR.toFile());
+        Files.copy(new ByteArrayInputStream(resourcePack.bytes()), RESOURCE_PACK_DIR, StandardCopyOption.REPLACE_EXISTING);
+        Resources.getResourcePackServerHandler().setPack(resourcePack);
     }
 
     protected static void downloadResourcePack(URL url) throws IOException {

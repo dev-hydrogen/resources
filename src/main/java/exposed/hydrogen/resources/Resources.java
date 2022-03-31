@@ -39,6 +39,12 @@ public final class Resources extends JavaPlugin {
 
         if (resourcePackPath.isEmpty()) {
             this.getLogger().info("No server resource pack found");
+            try {
+                resourcePackHandler = new ResourcePackHandler();
+            } catch (IOException | NoSuchAlgorithmException e) {
+                getLogger().log(java.util.logging.Level.SEVERE, "Failed to generate empty resource pack.", e);
+                return;
+            }
             startResourcePackServer(address, port.intValue());
             return;
         }
@@ -54,7 +60,8 @@ public final class Resources extends JavaPlugin {
                 getLogger().info("Resource Pack Size: " + resourcePackHandler.getResourcePack().bytes().length + " bytes");
                 getLogger().info("Starting resource pack server...");
             } catch (IOException | NoSuchAlgorithmException e) {
-                getLogger().log(java.util.logging.Level.SEVERE, "Failed to download resource pack.", e);
+                getLogger().log(java.util.logging.Level.SEVERE, "Failed to download or generate empty resource pack.", e);
+                return;
             }
             resourcePackHandler.isResourcePackDownloaded = true;
             startResourcePackServer(address, port.intValue());

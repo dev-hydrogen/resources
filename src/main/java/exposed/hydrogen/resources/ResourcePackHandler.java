@@ -4,6 +4,9 @@ import lombok.Getter;
 import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.NotNull;
 import team.unnamed.creative.ResourcePack;
+import team.unnamed.creative.base.Writable;
+import team.unnamed.creative.metadata.Metadata;
+import team.unnamed.creative.metadata.PackMeta;
 
 import java.io.*;
 import java.net.URL;
@@ -14,11 +17,20 @@ import java.security.NoSuchAlgorithmException;
 
 
 public class ResourcePackHandler {
-    public static final Path RESOURCE_PACK_DIR = new File(Resources.getInstance().getDataFolder().getAbsolutePath() + "/pack/downloadedpack.zip").toPath();
+    public static final Path RESOURCE_PACK_DIR = new File(Resources.getInstance().getDataFolder().getAbsolutePath() + "/pack/").toPath();
+    public static final Path DOWNLOADED_RESOURCE_PACK_DIR = new File(Resources.getInstance().getDataFolder().getAbsolutePath() + "/pack/downloadedpack.zip").toPath();
     @Getter @NotNull private ResourcePack resourcePack;
+    @Getter @NotNull private final ResourcePack emptyResourcePack;
     @Getter protected boolean isResourcePackDownloaded = false;
     @Getter private byte[] hash;
 
+    /**
+     * Resource pack handler constructor, generates a empty resource pack.
+     */
+    public ResourcePackHandler() throws IOException, NoSuchAlgorithmException {
+        emptyResourcePack = generateEmptyResourcePack();
+        setResourcePack(emptyResourcePack);
+    }
     /**
      * Resource pack handler constructor, downloads the resource pack and loads it as ResourcePack.
      * @param url URL of the resource pack
@@ -26,9 +38,15 @@ public class ResourcePackHandler {
      * @throws NoSuchAlgorithmException if algorithm is not found (should never happen)
      */
     public ResourcePackHandler(URL url) throws IOException, NoSuchAlgorithmException {
-        downloadResourcePack(url);
-        hash = Util.getSHA1HashBytes(RESOURCE_PACK_DIR.toFile());
-        resourcePack = new ResourcePack(new FileInputStream(RESOURCE_PACK_DIR.toFile()).readAllBytes(), Util.getSHA1Hash(RESOURCE_PACK_DIR.toFile()));
+        emptyResourcePack = generateEmptyResourcePack();
+        try {
+            downloadResourcePack(url);
+        } catch (IOException e) {
+            setResourcePack(emptyResourcePack);
+            return;
+        }
+        hash = Util.getSHA1HashBytes(DOWNLOADED_RESOURCE_PACK_DIR.toFile());
+        resourcePack = new ResourcePack(new FileInputStream(DOWNLOADED_RESOURCE_PACK_DIR.toFile()).readAllBytes(), Util.getSHA1Hash(DOWNLOADED_RESOURCE_PACK_DIR.toFile()));
     }
 
     /**
@@ -40,8 +58,8 @@ public class ResourcePackHandler {
     public void setResourcePack(ResourcePack resourcePack) throws IOException, NoSuchAlgorithmException {
         Validate.isTrue(resourcePack != null, "Resource pack cannot be null");
         this.resourcePack = resourcePack;
-        hash = Util.getSHA1HashBytes(RESOURCE_PACK_DIR.toFile());
         Files.copy(new ByteArrayInputStream(resourcePack.bytes()), RESOURCE_PACK_DIR, StandardCopyOption.REPLACE_EXISTING);
+        hash = Util.getSHA1HashBytes(RESOURCE_PACK_DIR.toFile());
         Resources.getResourcePackServerHandler().setPack(resourcePack);
     }
 
@@ -53,4 +71,15 @@ public class ResourcePackHandler {
         packStream.close();
     }
 
+    private ResourcePack generateEmptyResourcePack() {
+        return ResourcePack.build(tree -> {
+            tree.write(Metadata.builder()
+                    .add(PackMeta.of(8, ""))
+                    .build());
+            tree.write("credits.txt", Writable.bytes("""
+                       Unnamed Team - Creative
+                       Hydrogen - Resources
+                       """.getBytes()));
+        });
+    }
 }

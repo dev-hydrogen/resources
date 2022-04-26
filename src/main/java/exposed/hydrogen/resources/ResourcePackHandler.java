@@ -78,16 +78,14 @@ public class ResourcePackHandler {
         addResource(resource, false);
     }
     public void addResource(FileResource resource, boolean compile) {
-        resources.add(resource);
-        if(compile) compileAndSetResourcePack();
+        addResources(List.of(resource), compile);
     }
 
     public void addMetadataPart(MetadataPart part) {
         addMetadataPart(part,false);
     }
     public void addMetadataPart(MetadataPart part, boolean compile) {
-        metadataParts.add(part);
-        if(compile) compileAndSetResourcePack();
+        addMetadataParts(List.of(part), compile);
     }
 
     public void addResources(List<FileResource> resources) {

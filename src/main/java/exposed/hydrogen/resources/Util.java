@@ -1,5 +1,10 @@
 package exposed.hydrogen.resources;
 
+import team.unnamed.creative.ResourcePack;
+import team.unnamed.creative.file.FileResource;
+import team.unnamed.creative.metadata.Metadata;
+import team.unnamed.creative.metadata.MetadataPart;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +13,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 public class Util {
 
@@ -55,4 +61,13 @@ public class Util {
         }
         return result.toString();
     }
+
+    public static ResourcePack compileResourcePack(List<FileResource> resources, List<MetadataPart> metadataParts) {
+        return ResourcePack.build(tree -> {
+            Metadata.Builder builder = Metadata.builder();
+            metadataParts.forEach(part -> builder.add(MetadataPart.class, part));
+            resources.forEach(tree::write);
+        });
+    }
+
 }

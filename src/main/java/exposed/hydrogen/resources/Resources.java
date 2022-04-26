@@ -11,6 +11,8 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 
 public final class Resources extends JavaPlugin {
+    public static String RESOURCE_PACK_DOWNLOAD_URL;
+
     @Getter private static Resources instance;
     @Getter private static ResourcePackHandler resourcePackHandler;
     @Getter private static ResourcePackServerHandler resourcePackServerHandler;
@@ -35,7 +37,7 @@ public final class Resources extends JavaPlugin {
         }
 
         publicIP = Util.getPublicIP();
-        instance.getLogger().info("Public IP: " + publicIP);
+        RESOURCE_PACK_DOWNLOAD_URL = "http://" + publicIP + ":" + port;
 
         if (resourcePackPath.isEmpty()) {
             this.getLogger().info("No server resource pack found");
@@ -76,11 +78,7 @@ public final class Resources extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // needs to be async or this would block the server during shutdown
-        Thread shutdownserver = new Thread(() -> {
-            resourcePackServerHandler.getServer().stop(2);
-        });
-        shutdownserver.start();
+        resourcePackServerHandler.getServer().stop(0);
     }
 
     private void startResourcePackServer(String address, int port) {
@@ -88,7 +86,8 @@ public final class Resources extends JavaPlugin {
 
         this.getLogger().info("Resource pack server started. Address: " + resourcePackServerHandler.getServer().httpServer().getAddress());
         // Disable server.properties resource pack
-        MinecraftServer.getServer().a("http://" + publicIP + ":" + port, "");
+        // MinecraftServer.getServer().a("http://" + publicIP + ":" + port, "");
+        MinecraftServer.getServer().a("", "");
     }
 
 }

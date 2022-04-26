@@ -29,6 +29,7 @@ public class ResourcePackHandler {
     @Getter private byte[] hash;
     @Getter private final LinkedList<FileResource> resources;
     @Getter private final LinkedList<MetadataPart> metadataParts;
+    @Getter private String credits;
 
     /**
      * Resource pack handler constructor, generates a empty resource pack.
@@ -103,6 +104,9 @@ public class ResourcePackHandler {
         metadataParts.addAll(parts);
         if(compile) compileAndSetResourcePack();
     }
+    public void addCredit(String credit) {
+        credits = credits.concat(credit).concat(System.lineSeparator());
+    }
 
     protected static void downloadResourcePack(URL url) throws IOException {
         Resources.getInstance().getLogger().info("Downloading resource pack...");
@@ -124,7 +128,7 @@ public class ResourcePackHandler {
     }
     private void compileAndSetResourcePack() {
         try {
-            setResourcePack(Util.compileResourcePack(resources, metadataParts));
+            setResourcePack(Util.compileResourcePack(resources, metadataParts, credits));
         } catch (IOException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }

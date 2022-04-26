@@ -24,7 +24,7 @@ public class ResourcePackServerHandler {
 
     public void start() {
         if(server != null) {
-            server.stop(1);
+            server.stop(0);
         }
         try {
             server = ResourcePackServer.builder()

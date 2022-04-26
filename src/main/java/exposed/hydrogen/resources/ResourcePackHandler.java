@@ -27,8 +27,8 @@ public class ResourcePackHandler {
     @Getter @NotNull private final ResourcePack emptyResourcePack;
     @Getter protected boolean isResourcePackDownloaded = false;
     @Getter private byte[] hash;
-    @Getter private LinkedList<FileResource> resources;
-    @Getter private LinkedList<MetadataPart> metadataParts;
+    @Getter private final LinkedList<FileResource> resources;
+    @Getter private final LinkedList<MetadataPart> metadataParts;
 
     /**
      * Resource pack handler constructor, generates a empty resource pack.
@@ -36,6 +36,9 @@ public class ResourcePackHandler {
     public ResourcePackHandler() throws IOException, NoSuchAlgorithmException {
         emptyResourcePack = generateEmptyResourcePack();
         setResourcePack(emptyResourcePack);
+
+        resources = new LinkedList<>();
+        metadataParts = new LinkedList<>();
     }
     /**
      * Resource pack handler constructor, downloads the resource pack and loads it as ResourcePack.
@@ -45,6 +48,8 @@ public class ResourcePackHandler {
      */
     public ResourcePackHandler(URL url) throws IOException, NoSuchAlgorithmException {
         emptyResourcePack = generateEmptyResourcePack();
+        resources = new LinkedList<>();
+        metadataParts = new LinkedList<>();
         try {
             downloadResourcePack(url);
         } catch (IOException e) {

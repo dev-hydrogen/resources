@@ -18,7 +18,7 @@ import java.util.List;
 
 
 public class ResourcePackHandler {
-    public static final Path RESOURCE_PACK_DIR = new File(Resources.getInstance().getDataFolder().getAbsolutePath() + "/pack/").toPath();
+    public static final Path RESOURCE_PACK_DIR = new File(Resources.getInstance().getDataFolder().getAbsolutePath() + "/pack/pack.zip").toPath();
     public static final Path DOWNLOADED_RESOURCE_PACK_DIR = new File(Resources.getInstance().getDataFolder().getAbsolutePath() + "/pack/downloadedpack.zip").toPath();
     @Getter @NotNull private ResourcePack resourcePack;
     @Getter @NotNull private final ResourcePack emptyResourcePack;
@@ -52,7 +52,7 @@ public class ResourcePackHandler {
             downloadResourcePack(url);
         } catch (IOException e) {
             setResourcePack(emptyResourcePack);
-            Resources.getInstance().getLogger().log(java.util.logging.Level.SEVERE, "Failed to download resource pack", e);
+            Resources.getInstance().getLogger().log(java.util.logging.Level.SEVERE, "Failed to download resource pack, resource pack is set as empty", e);
             return;
         }
         hash = Util.getSHA1HashBytes(DOWNLOADED_RESOURCE_PACK_DIR.toFile());
@@ -68,8 +68,9 @@ public class ResourcePackHandler {
     public void setResourcePack(ResourcePack resourcePack) throws IOException, NoSuchAlgorithmException {
         Validate.isTrue(resourcePack != null, "Resource pack cannot be null");
         this.resourcePack = resourcePack;
-        Files.copy(new ByteArrayInputStream(resourcePack.bytes()), RESOURCE_PACK_DIR, StandardCopyOption.REPLACE_EXISTING);
-        hash = Util.getSHA1HashBytes(RESOURCE_PACK_DIR.toFile());
+        hash = Util.getSHA1HashBytes(this.resourcePack.bytes());
+        Files.copy(new ByteArrayInputStream(this.resourcePack.bytes()), RESOURCE_PACK_DIR, StandardCopyOption.REPLACE_EXISTING);
+        Resources.getResourcePackServerHandler().start();
     }
 
     public void addResource(FileResource resource) {
@@ -109,7 +110,7 @@ public class ResourcePackHandler {
         Resources.getInstance().getLogger().info("Downloading resource pack...");
 
         InputStream packStream = url.openStream();
-        Files.copy(packStream, RESOURCE_PACK_DIR, StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(packStream, DOWNLOADED_RESOURCE_PACK_DIR, StandardCopyOption.REPLACE_EXISTING);
         packStream.close();
     }
 

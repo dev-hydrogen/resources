@@ -18,10 +18,11 @@ import java.util.List;
 
 
 public class ResourcePackHandler {
-    public static final Path RESOURCE_PACK_DIR = new File(Resources.getInstance().getDataFolder().getAbsolutePath() + "/pack/pack.zip").toPath();
-    public static final Path DOWNLOADED_RESOURCE_PACK_DIR = new File(Resources.getInstance().getDataFolder().getAbsolutePath() + "/pack/downloadedpack.zip").toPath();
+    public static final Path USER_SET_PACK_DIR = new File(Resources.getChameleon().getDataFolder().toFile().getAbsolutePath() + "/pack/pack.zip").toPath();
+    public static final Path RESOURCE_PACK_DIR = new File(Resources.getChameleon().getDataFolder().toFile().getAbsolutePath() + "/pack/generatedpack.zip").toPath();
+    public static final Path DOWNLOADED_RESOURCE_PACK_DIR = new File(Resources.getChameleon().getDataFolder().toFile().getAbsolutePath() + "/pack/downloadedpack.zip").toPath();
     @Getter @NotNull private ResourcePack resourcePack;
-    @Getter @NotNull private final ResourcePack emptyResourcePack;
+    @Getter @NotNull private static final ResourcePack emptyResourcePack;
     @Getter protected boolean isResourcePackDownloaded = false;
     @Getter private byte[] hash;
     @Getter private final LinkedList<FileResource> resources;
@@ -32,9 +33,9 @@ public class ResourcePackHandler {
      * Resource pack handler constructor, generates a empty resource pack.
      */
     public ResourcePackHandler() throws IOException, NoSuchAlgorithmException {
-        emptyResourcePack = generateEmptyResourcePack();
-        setResourcePack(emptyResourcePack);
+        setResourcePack(emptyResourcePack,false);
 
+        hash = Util.getSHA1HashBytes(emptyResourcePack.bytes());
         resources = new LinkedList<>();
         metadataParts = new LinkedList<>();
     }
@@ -45,18 +46,25 @@ public class ResourcePackHandler {
      * @throws NoSuchAlgorithmException if algorithm is not found (should never happen)
      */
     public ResourcePackHandler(URL url) throws IOException, NoSuchAlgorithmException {
-        emptyResourcePack = generateEmptyResourcePack();
         resources = new LinkedList<>();
         metadataParts = new LinkedList<>();
         try {
             downloadResourcePack(url);
         } catch (IOException e) {
-            setResourcePack(emptyResourcePack);
-            Resources.getInstance().getLogger().log(java.util.logging.Level.SEVERE, "Failed to download resource pack, resource pack is set as empty", e);
+            setResourcePack(emptyResourcePack,false);
+            hash = Util.getSHA1HashBytes(emptyResourcePack.bytes());
+            Resources.getChameleon().getLogger().error("Failed to download resource pack, resource pack is set as empty", e);
             return;
         }
         hash = Util.getSHA1HashBytes(DOWNLOADED_RESOURCE_PACK_DIR.toFile());
         resourcePack = new ResourcePack(new FileInputStream(DOWNLOADED_RESOURCE_PACK_DIR.toFile()).readAllBytes(), Util.getSHA1Hash(DOWNLOADED_RESOURCE_PACK_DIR.toFile()));
+    }
+
+    public ResourcePackHandler(ResourcePack resourcePack) throws IOException, NoSuchAlgorithmException {
+        setResourcePack(resourcePack,false);
+        hash = Util.getSHA1HashBytes(resourcePack.bytes());
+        resources = new LinkedList<>();
+        metadataParts = new LinkedList<>();
     }
 
     /**
@@ -65,12 +73,14 @@ public class ResourcePackHandler {
      * @throws IOException if the resource pack could not be written to file, or if the resource pack is invalid
      * @throws NoSuchAlgorithmException if the algorithm is not found (should never happen)
      */
-    public void setResourcePack(ResourcePack resourcePack) throws IOException, NoSuchAlgorithmException {
+    public void setResourcePack(ResourcePack resourcePack, boolean startServer) throws IOException, NoSuchAlgorithmException {
         Validate.isTrue(resourcePack != null, "Resource pack cannot be null");
         this.resourcePack = resourcePack;
         hash = Util.getSHA1HashBytes(this.resourcePack.bytes());
         Files.copy(new ByteArrayInputStream(this.resourcePack.bytes()), RESOURCE_PACK_DIR, StandardCopyOption.REPLACE_EXISTING);
-        Resources.getResourcePackServerHandler().start();
+        if(startServer) {
+            Resources.getResourcePackServerHandler().start();
+        }
     }
 
     public void addResource(FileResource resource) {
@@ -107,21 +117,25 @@ public class ResourcePackHandler {
     }
 
     protected static void downloadResourcePack(URL url) throws IOException {
-        Resources.getInstance().getLogger().info("Downloading resource pack...");
+        Resources.getChameleon().getLogger().info("Downloading resource pack...");
 
         InputStream packStream = url.openStream();
         Files.copy(packStream, DOWNLOADED_RESOURCE_PACK_DIR, StandardCopyOption.REPLACE_EXISTING);
         packStream.close();
     }
 
-    private ResourcePack generateEmptyResourcePack() {
+    private static ResourcePack generateEmptyResourcePack() {
         return Util.compileResourcePack(List.of(), List.of(), "");
     }
     private void compileAndSetResourcePack() {
         try {
-            setResourcePack(Util.compileResourcePack(resources, metadataParts, credits));
+            setResourcePack(Util.compileResourcePack(resources, metadataParts, credits),true);
         } catch (IOException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
+    }
+
+    static {
+        emptyResourcePack = generateEmptyResourcePack();
     }
 }

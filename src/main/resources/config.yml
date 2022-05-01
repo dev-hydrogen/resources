@@ -1,3 +1,0 @@
-address: 0.0.0.0
-port: 8080 # Make sure to open this port
-description: "This is a description" # Description used in resource pack

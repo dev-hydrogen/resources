@@ -1,6 +1,6 @@
 name: Resources
-version: '${project.version}'
-main: exposed.hydrogen.resources.Resources
+version: ${project.version}
+main: exposed.hydrogen.resources.ResourcesSpigot
 api-version: 1.18
 load: STARTUP
 authors: [ Hydrogen ]

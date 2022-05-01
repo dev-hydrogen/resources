@@ -1,0 +1,5 @@
+{
+  "entrypoint": "exposed.hydrogen.resources.ResourcesMinestom",
+  "name": "Resources",
+  "version": "1.0.0"
+}

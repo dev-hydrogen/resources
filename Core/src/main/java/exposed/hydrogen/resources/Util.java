@@ -7,10 +7,7 @@ import team.unnamed.creative.metadata.Metadata;
 import team.unnamed.creative.metadata.MetadataPart;
 import team.unnamed.creative.metadata.PackMeta;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.security.MessageDigest;
@@ -97,6 +94,11 @@ public class Util {
             metadataParts.forEach(part -> builder.add(MetadataPart.class, part));
             resources.forEach(tree::write);
         });
+    }
+
+    public static ResourcePack getPackFromFile(File file) throws IOException {
+        byte[] bytes = Files.readAllBytes(file.toPath());
+        return new ResourcePack(bytes,bytesToHex(bytes));
     }
 
 }

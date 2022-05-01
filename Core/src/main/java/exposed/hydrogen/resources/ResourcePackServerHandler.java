@@ -16,7 +16,7 @@ public class ResourcePackServerHandler {
         this.port = port;
         this.handler = handler;
         if(!handler.isResourcePackDownloaded) {
-            Resources.getInstance().getLogger().info("Starting server without resource pack downloaded...");
+            Resources.getChameleon().getLogger().info("Starting server without resource pack downloaded...");
         }
         start();
     }
@@ -32,7 +32,7 @@ public class ResourcePackServerHandler {
                     .pack(handler.getResourcePack())
                     .build();
         } catch (IOException e) {
-            Resources.getInstance().getLogger().log(java.util.logging.Level.SEVERE, "Failed to start resource pack server.", e);
+            Resources.getChameleon().getLogger().error("Failed to start resource pack server.", e);
         }
         server.start();
     }

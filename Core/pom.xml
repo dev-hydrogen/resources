@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <version>1.0</version>
+
+    <parent>
+        <groupId>exposed.hydrogen.resources</groupId>
+        <artifactId>Resources</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <name>Resources-core</name>
+    <artifactId>Core</artifactId>
+
+    <description>Resource pack server using unnamed team's creative api</description>
+    <properties>
+        <java.version>17</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>sonatype</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>unnamed</id>
+            <url>https://repo.unnamed.team/repository/unnamed-snapshots/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>team.unnamed</groupId>
+            <artifactId>creative-api</artifactId>
+            <version>0.3.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>team.unnamed</groupId>
+            <artifactId>creative-server</artifactId>
+            <version>0.3.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>dev.hypera.chameleon</groupId>
+            <artifactId>core</artifactId>
+            <version>0.4.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.hypera.chameleon</groupId>
+            <artifactId>feature-configuration</artifactId>
+            <version>0.4.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+</project>

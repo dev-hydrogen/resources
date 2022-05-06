@@ -7,7 +7,7 @@
     <parent>
         <groupId>exposed.hydrogen.resources</groupId>
         <artifactId>Resources</artifactId>
-        <version>${revision}</version>
+        <version>1.0</version>
     </parent>
 
     <name>Resources-spigot</name>
@@ -30,7 +30,7 @@
         <dependency>
             <groupId>exposed.hydrogen.resources</groupId>
             <artifactId>Core</artifactId>
-            <version>${revision}</version>
+            <version>1.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

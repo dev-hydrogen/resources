@@ -6,7 +6,7 @@
     <parent>
         <groupId>exposed.hydrogen.resources</groupId>
         <artifactId>Resources</artifactId>
-        <version>${revision}</version>
+        <version>1.0</version>
     </parent>
 
     <artifactId>Resources-all</artifactId>
@@ -33,35 +33,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.3.1-SNAPSHOT</version>
-                <configuration>
-                    <minimizeJar>true</minimizeJar>
-                    <filters>
-                        <filter>
-                            <artifact>exposed.hydrogen.resources:Core</artifact>
-                            <includes>
-                                <include>**</include>
-                            </includes>
-                        </filter>
-                        <filter>
-                            <artifact>exposed.hydrogen.resources:Spigot</artifact>
-                            <includes>
-                                <include>**</include>
-                            </includes>
-                        </filter>
-                        <filter>
-                            <artifact>exposed.hydrogen.resources:Minestom</artifact>
-                            <includes>
-                                <include>**</include>
-                            </includes>
-                        </filter>
-                        <filter>
-                            <artifact>team.unnamed:creative-api</artifact>
-                            <includes>
-                                <include>**</include>
-                            </includes>
-                        </filter>
-                    </filters>
-                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -78,19 +49,19 @@
         <dependency>
             <groupId>exposed.hydrogen.resources</groupId>
             <artifactId>Core</artifactId>
-            <version>${revision}</version>
+            <version>1.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>exposed.hydrogen.resources</groupId>
             <artifactId>Spigot</artifactId>
-            <version>${revision}</version>
+            <version>1.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>exposed.hydrogen.resources</groupId>
             <artifactId>Minestom</artifactId>
-            <version>${revision}</version>
+            <version>1.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

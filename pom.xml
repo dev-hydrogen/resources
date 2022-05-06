@@ -7,7 +7,7 @@
     <groupId>exposed.hydrogen.resources</groupId>
     <artifactId>Resources</artifactId>
     <packaging>pom</packaging>
-    <version>${revision}</version>
+    <version>1.0</version>
 
     <modules>
         <module>Core</module>

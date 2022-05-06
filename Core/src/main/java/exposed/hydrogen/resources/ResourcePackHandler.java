@@ -27,7 +27,7 @@ public class ResourcePackHandler {
     @Getter private byte[] hash;
     @Getter private final LinkedList<FileResource> resources;
     @Getter private final LinkedList<MetadataPart> metadataParts;
-    @Getter private String credits;
+    @Getter private String credits = "";
 
     /**
      * Resource pack handler constructor, generates a empty resource pack.
@@ -83,37 +83,37 @@ public class ResourcePackHandler {
         }
     }
 
-    public void addResource(FileResource resource) {
+    public <T extends FileResource> void addResource(T resource) {
         addResource(resource, false);
     }
-    public void addResource(FileResource resource, boolean compile) {
+    public <T extends FileResource> void addResource(T resource, boolean compile) {
         addResources(List.of(resource), compile);
     }
 
-    public void addMetadataPart(MetadataPart part) {
+    public <T extends MetadataPart> void addMetadataPart(T part) {
         addMetadataPart(part,false);
     }
-    public void addMetadataPart(MetadataPart part, boolean compile) {
+    public <T extends MetadataPart> void addMetadataPart(T part, boolean compile) {
         addMetadataParts(List.of(part), compile);
     }
 
-    public void addResources(List<FileResource> resources) {
+    public <T extends FileResource> void addResources(List<T> resources) {
         addResources(resources, false);
     }
-    public void addResources(List<FileResource> resources, boolean compile) {
+    public <T extends FileResource> void addResources(List<T> resources, boolean compile) {
         this.resources.addAll(resources);
         if(compile) compileAndSetResourcePack();
     }
 
-    public void addMetadataParts(List<MetadataPart> parts) {
+    public <T extends MetadataPart> void addMetadataParts(List<T> parts) {
         addMetadataParts(parts, false);
     }
-    public void addMetadataParts(List<MetadataPart> parts, boolean compile) {
+    public <T extends MetadataPart> void addMetadataParts(List<T> parts, boolean compile) {
         metadataParts.addAll(parts);
         if(compile) compileAndSetResourcePack();
     }
     public void addCredit(String credit) {
-        credits = credits.concat(credit).concat(System.lineSeparator());
+        credits = credits + credit + System.lineSeparator();
     }
 
     protected static void downloadResourcePack(URL url) throws IOException {

@@ -1,3 +1,25 @@
+/*
+ * Copyright (c) 2022.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package exposed.hydrogen.resources;
 
 import team.unnamed.creative.ResourcePack;
@@ -7,7 +29,10 @@ import team.unnamed.creative.metadata.Metadata;
 import team.unnamed.creative.metadata.MetadataPart;
 import team.unnamed.creative.metadata.PackMeta;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.file.Files;
 import java.security.MessageDigest;
@@ -73,8 +98,15 @@ public class Util {
         }
         return result.toString();
     }
+    /*public static void mergeZips(File zip1, File zip2) throws IOException {
+        new ZipFile(zip1).mergeSplitFiles(ResourcePackHandler.MERGED_PACK_DIR.toFile());
+        new ZipFile(zip2).mergeSplitFiles(ResourcePackHandler.MERGED_PACK_DIR.toFile());
+    }*/
 
-    public static ResourcePack compileResourcePack(List<FileResource> resources, List<MetadataPart> metadataParts, String credits) {
+    public static ResourcePack compileResourcePack(List<FileResource> resources,
+                                                   List<MetadataPart> metadataParts,
+                                                   List<CustomResource> customResources,
+                                                   String credits) {
         return ResourcePack.build(tree -> {
             tree.write(Metadata.builder()
                     .add(PackMeta.of(8,
@@ -89,7 +121,7 @@ public class Util {
                        Resources - Hydrogen
                        
                        """ + credits).getBytes()));
-
+            customResources.forEach(customResource -> tree.write(customResource.path(), customResource.data()));
             Metadata.Builder builder = Metadata.builder();
             metadataParts.forEach(part -> builder.add(MetadataPart.class, part));
             resources.forEach(tree::write);

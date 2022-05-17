@@ -77,7 +77,7 @@ public final class Resources extends ChameleonPlugin {
         }
 
         publicIP = Util.getPublicIP();
-        RESOURCE_PACK_DOWNLOAD_URL = "http://" + publicIP + ":" + port;
+        RESOURCE_PACK_DOWNLOAD_URL = "http://" + (address.equals("0.0.0.0") ? publicIP : address) + ":" + port;
 
         if (resourcePackPath.toString().isEmpty()) {
             chameleon.getLogger().info("No server resource pack found");
@@ -85,6 +85,7 @@ public final class Resources extends ChameleonPlugin {
             if(userSetPack.exists()){
                 try {
                     resourcePackHandler = new ResourcePackHandler(Util.getPackFromFile(userSetPack));
+                    startResourcePackServer();
                     return;
                 } catch (IOException | NoSuchAlgorithmException e) {
                     e.printStackTrace();
@@ -121,7 +122,7 @@ public final class Resources extends ChameleonPlugin {
     static {
         pluginData = new PluginData(
                 "Resources",
-                "1.0.0",
+                "1.2.0",
                 "Resource pack compiler and server",
                 "hydrogen.exposed",
                 List.of("hydrogen"),

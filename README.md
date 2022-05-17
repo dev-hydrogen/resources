@@ -23,3 +23,5 @@ Available on JitPack: https://jitpack.io/#dev-hydrogen/resources/1.1
 	<version>1.1</version>
 </dependency>
 ```
+
+Used by [EmortalMC](https://github.com/EmortalMC)! ! ! !

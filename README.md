@@ -21,4 +21,5 @@ Available on JitPack: https://jitpack.io/#dev-hydrogen/resources/1.1
 	<groupId>com.github.dev-hydrogen</groupId>
 	<artifactId>resources</artifactId>
 	<version>1.1</version>
-</dependency>```
+</dependency>
+```

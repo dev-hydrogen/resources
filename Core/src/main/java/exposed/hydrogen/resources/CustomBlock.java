@@ -22,17 +22,16 @@
 
 package exposed.hydrogen.resources;
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import lombok.Getter;
+import team.unnamed.creative.blockstate.MultiVariant;
+import team.unnamed.creative.texture.Texture;
 
-public class ResourcePackSendListener implements Listener {
+public class CustomBlock {
+    @Getter public MultiVariant variants;
+    @Getter public Texture blockTexture;
 
-    @EventHandler
-    public void onLogin(PlayerJoinEvent event) {
-        if(Resources.getResourcePackHandler() == null || Resources.getResourcePackServerHandler() == null) return;
-        Resources.getChameleon().getLogger().info("Sending resource pack to " + event.getPlayer().getName() + " with hash " + Util.bytesToHex(Resources.getResourcePackHandler().getHash()));
-        event.getPlayer().setResourcePack(Resources.RESOURCE_PACK_DOWNLOAD_URL,
-                Resources.getResourcePackHandler().getHash(), Resources.getResourcePackPrompt(), Resources.isResourcePackRequired());
+    public CustomBlock(MultiVariant variants, Texture blockTexture) {
+        this.variants = variants;
+        this.blockTexture = blockTexture;
     }
 }

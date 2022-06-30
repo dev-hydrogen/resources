@@ -45,6 +45,8 @@ public class ResourcesMinestom extends Extension {
             return LoadStatus.FAILED;
         }
         MinecraftServer.getGlobalEventHandler().addListener(PlayerLoginEvent.class, event -> {
+            if(Resources.getResourcePackHandler() == null || Resources.getResourcePackServerHandler() == null) return;
+
             String bytes = Util.bytesToHex(Resources.getResourcePackHandler().getHash());
             Resources.getChameleon().getLogger().info("Sending resource pack to " + event.getPlayer().getUsername() + " with hash " + bytes);
             event.getPlayer().setResourcePack(Resources.isResourcePackRequired() ?

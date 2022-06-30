@@ -97,6 +97,7 @@ public final class Resources extends ChameleonPlugin {
             }
             try {
                 resourcePackHandler = new ResourcePackHandler();
+                startResourcePackServer();
             } catch (IOException | NoSuchAlgorithmException e) {
                 chameleon.getLogger().error("Failed to generate empty resource pack.", e);
                 return;
@@ -111,7 +112,7 @@ public final class Resources extends ChameleonPlugin {
         resourcePackServerHandler.getServer().stop(0);
     }
 
-    public static void startResourcePackServer() {
+    public void startResourcePackServer() {
         resourcePackServerHandler = new ResourcePackServerHandler(address, port.intValue(), resourcePackHandler);
 
         chameleon.getLogger().info("Resource pack server started. Address: " + resourcePackServerHandler.getServer().httpServer().getAddress());

@@ -97,10 +97,7 @@ public final class Resources extends ChameleonPlugin {
             startResourcePackServer();
         } catch (IOException | NoSuchAlgorithmException e) {
             chameleon.getLogger().error("Failed to generate empty resource pack.", e);
-            return;
         }
-        startResourcePackServer();
-        return;
     }
 
     @Override

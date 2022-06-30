@@ -109,7 +109,7 @@ public class Util {
                                                    String credits) {
         return ResourcePack.build(tree -> {
             tree.write(Metadata.builder()
-                    .add(PackMeta.of(8,
+                    .add(PackMeta.of(9,
                             ofNullable(Resources.getInstance().getConfig().getString("description"))
                             .orElse("")))
                     .build());

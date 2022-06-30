@@ -28,9 +28,6 @@ import lombok.Getter;
 import net.minecraft.server.MinecraftServer;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-
 public class ResourcesSpigot extends JavaPlugin {
     @Getter private static ResourcesSpigot instance;
     private SpigotChameleon chameleon;
@@ -41,15 +38,9 @@ public class ResourcesSpigot extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ResourcePackSendListener(), this);
         try {
             chameleon = new SpigotChameleon(Resources.class, this, Resources.getPluginData());
+            chameleon.onEnable();
         } catch (ChameleonInstantiationException ex) {
             ex.printStackTrace();
-        }
-        ResourcePackHandler resourcePackHandler = null;
-        try {
-            resourcePackHandler = new ResourcePackHandler();
-        } catch (IOException | NoSuchAlgorithmException e) {
-            chameleon.getLogger().error("Couldnt start pack handler", e);
-            this.getPluginLoader().disablePlugin(this);
         }
         if(!MinecraftServer.getServer()
                 .R()
@@ -58,9 +49,7 @@ public class ResourcesSpigot extends JavaPlugin {
         ) {
             chameleon.getLogger().warn("Please clear the resource-pack and resource-pack-sha1 properties from server.properties");
         }
-        Resources.setResourcePackHandler(resourcePackHandler);
-        Resources.startResourcePackServer();
-        chameleon.onEnable();
+
     }
 
     @Override

@@ -79,32 +79,28 @@ public final class Resources extends ChameleonPlugin {
         publicIP = Util.getPublicIP();
         RESOURCE_PACK_DOWNLOAD_URL = "http://" + (address.equals("0.0.0.0") ? publicIP : address) + ":" + port;
 
-        if (resourcePackPath.toString().isEmpty()) {
-            chameleon.getLogger().info("No server resource pack found");
-            File userSetPack = ResourcePackHandler.USER_SET_PACK_DIR.toFile();
-            if(userSetPack.exists()){
-                try {
-                    resourcePackHandler = new ResourcePackHandler(Util.getPackFromFile(userSetPack));
-                    startResourcePackServer();
-                    return;
-                } catch (IOException | NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                    return;
-                }
-
-            } else{
-                chameleon.getLogger().info("No user set resource pack found");
-            }
+        File userSetPack = ResourcePackHandler.USER_SET_PACK_DIR.toFile();
+        if(userSetPack.exists()){
             try {
-                resourcePackHandler = new ResourcePackHandler();
+                resourcePackHandler = new ResourcePackHandler(Util.getPackFromFile(userSetPack));
                 startResourcePackServer();
+                return;
             } catch (IOException | NoSuchAlgorithmException e) {
-                chameleon.getLogger().error("Failed to generate empty resource pack.", e);
+                e.printStackTrace();
                 return;
             }
+        } else {
+            chameleon.getLogger().info("No user set resource pack found");
+        }
+        try {
+            resourcePackHandler = new ResourcePackHandler();
             startResourcePackServer();
+        } catch (IOException | NoSuchAlgorithmException e) {
+            chameleon.getLogger().error("Failed to generate empty resource pack.", e);
             return;
         }
+        startResourcePackServer();
+        return;
     }
 
     @Override
@@ -116,8 +112,6 @@ public final class Resources extends ChameleonPlugin {
         resourcePackServerHandler = new ResourcePackServerHandler(address, port.intValue(), resourcePackHandler);
 
         chameleon.getLogger().info("Resource pack server started. Address: " + resourcePackServerHandler.getServer().httpServer().getAddress());
-        // Disable server.properties resource pack
-        // MinecraftServer.getServer().a("http://" + publicIP + ":" + port, "");
     }
 
     static {

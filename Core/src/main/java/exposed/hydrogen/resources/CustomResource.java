@@ -22,11 +22,9 @@
 
 package exposed.hydrogen.resources;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import team.unnamed.creative.base.Writable;
 
 @Builder
-@AllArgsConstructor
 public record CustomResource(String path, Writable data) {
 }

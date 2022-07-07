@@ -46,7 +46,7 @@ public class Util {
     public static String getPublicIP() {
         // https://stackoverflow.com/questions/2939218/getting-the-external-ip-address-in-java
         try {
-            URL whatismyip = new URL("http://checkip.amazonaws.com");
+            URL whatismyip = new URL("https://checkip.amazonaws.com");
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     whatismyip.openStream()));
             return in.readLine();
@@ -110,7 +110,7 @@ public class Util {
         return ResourcePack.build(tree -> {
             tree.write(Metadata.builder()
                     .add(PackMeta.of(9,
-                            ofNullable(Resources.getInstance().getConfig().getString("description"))
+                            ofNullable(Resources.getConfig().getString("description"))
                             .orElse("")))
                     .build());
             tree.write("credits.txt", Writable.bytes(("""

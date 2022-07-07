@@ -26,32 +26,59 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>exposed.hydrogen.resources</groupId>
-    <artifactId>Resources</artifactId>
-    <packaging>pom</packaging>
-    <version>1.2.0</version>
+    <parent>
+        <artifactId>Resources</artifactId>
+        <groupId>exposed.hydrogen.resources</groupId>
+        <version>1.2.0</version>
+    </parent>
 
-    <modules>
-        <module>Core</module>
-        <module>Spigot</module>
-        <module>Minestom</module>
-        <module>Assemble</module>
-        <module>Velocity</module>
-    </modules>
+    <artifactId>Velocity</artifactId>
+
+    <name>Resources-velocity</name>
+
+    <repositories>
+        <repository>
+            <id>sonatype</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>jitpack</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>hypera-snapshots</id>
+            <url>https://repo.hypera.dev/snapshots/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.velocitypowered</groupId>
+            <artifactId>velocity-api</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>exposed.hydrogen.resources</groupId>
+            <artifactId>Core</artifactId>
+            <version>1.2.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>dev.hypera.chameleon</groupId>
+            <artifactId>platform-velocity</artifactId>
+            <version>0.4.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <java.version>17</java.version>
-        <revision>1.2.0</revision>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.24</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
 </project>

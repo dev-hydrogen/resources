@@ -74,5 +74,11 @@
             <version>1.2.0</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>exposed.hydrogen.resources</groupId>
+            <artifactId>Velocity</artifactId>
+            <version>1.2.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>

@@ -46,10 +46,12 @@ public class Util {
     public static String getPublicIP() {
         // https://stackoverflow.com/questions/2939218/getting-the-external-ip-address-in-java
         try {
-            URL whatismyip = new URL("https://checkip.amazonaws.com");
+            URL whatismyip = new URL("http://checkip.amazonaws.com");
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     whatismyip.openStream()));
-            return in.readLine();
+            String ip = in.readLine();
+            //Resources.getChameleon().getLogger().info("Public ip: " + ip);
+            return ip;
         } catch (IOException e) {
             e.printStackTrace();
             return "";

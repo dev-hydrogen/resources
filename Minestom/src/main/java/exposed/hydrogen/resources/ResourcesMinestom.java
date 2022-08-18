@@ -30,31 +30,35 @@ import net.minestom.server.extensions.Extension;
 import net.minestom.server.resourcepack.ResourcePack;
 
 import java.nio.file.Path;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class ResourcesMinestom extends Extension {
     private MinestomChameleon chameleon;
 
     @Override
-    public LoadStatus initialize() {
+    public void initialize() {
         Resources.setResourcePackPath(Path.of(""));
         try {
             chameleon = new MinestomChameleon(Resources.class, this, Resources.getPluginData());
             chameleon.onEnable();
         } catch (ChameleonInstantiationException ex) {
             ex.printStackTrace();
-            return LoadStatus.FAILED;
         }
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
         MinecraftServer.getGlobalEventHandler().addListener(PlayerLoginEvent.class, event -> {
             if(Resources.getResourcePackHandler() == null || Resources.getResourcePackServerHandler() == null) return;
-
-            String bytes = Util.bytesToHex(Resources.getResourcePackHandler().getHash());
-            Resources.getChameleon().getLogger().info("Sending resource pack to " + event.getPlayer().getUsername() + " with hash " + bytes);
-            event.getPlayer().setResourcePack(Resources.isResourcePackRequired() ?
-                   ResourcePack.forced(Resources.RESOURCE_PACK_DOWNLOAD_URL,
-                           bytes) :
-                   ResourcePack.optional(Resources.RESOURCE_PACK_DOWNLOAD_URL, bytes));
+            Runnable run = () -> {
+                String bytes = Util.bytesToHex(Resources.getResourcePackHandler().getHash());
+                Resources.getChameleon().getLogger().info("Sending resource pack to " + event.getPlayer().getUsername() + " with hash " + bytes);
+                event.getPlayer().setResourcePack(Resources.isResourcePackRequired() ?
+                        ResourcePack.forced(Resources.RESOURCE_PACK_DOWNLOAD_URL,
+                                bytes) :
+                        ResourcePack.optional(Resources.RESOURCE_PACK_DOWNLOAD_URL, bytes));
+            };
+            executorService.schedule(run,2000, TimeUnit.MILLISECONDS);
         });
-        return LoadStatus.SUCCESS;
     }
 
     @Override

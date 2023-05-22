@@ -1,3 +1,5 @@
+# For users on spigot & co or forks, please consider using Creative Central instead, it is a better plugin that achieves the same purpose. https://modrinth.com/plugin/central
+
 # resources
 ### Allows plugins to compile a resource pack completely on the server, and serves any resource pack to players!
 

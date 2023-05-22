@@ -25,7 +25,6 @@ package exposed.hydrogen.resources;
 import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.platforms.spigot.SpigotChameleon;
 import lombok.Getter;
-import net.minecraft.server.MinecraftServer;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ResourcesSpigot extends JavaPlugin {
@@ -42,13 +41,13 @@ public class ResourcesSpigot extends JavaPlugin {
         } catch (ChameleonInstantiationException ex) {
             ex.printStackTrace();
         }
-        if(!MinecraftServer.getServer()
+        /*if(!MinecraftServer.getServer()
                 .R()
                 .orElse(new MinecraftServer.ServerResourcePackInfo("","",false,null))
                 .a().isEmpty()
         ) {
             chameleon.getLogger().warn("Please clear the resource-pack and resource-pack-sha1 properties from server.properties");
-        }
+        }*/
 
     }
 

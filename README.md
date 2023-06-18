@@ -1,3 +1,5 @@
+# Please use [creative central](https://modrinth.com/plugin/central) instead!
+
 # resources
 ### Allows plugins to compile a resource pack completely on the server, and serves any resource pack to players!
 
@@ -23,5 +25,3 @@ Available on JitPack: https://jitpack.io/#dev-hydrogen/resources/1.1
 	<version>1.1</version>
 </dependency>
 ```
-
-Used by [EmortalMC](https://github.com/EmortalMC)! ! ! !

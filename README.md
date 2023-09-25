@@ -1,4 +1,4 @@
-# Please use [creative central](https://modrinth.com/plugin/central) instead!
+# Please use [creative central](https://modrinth.com/plugin/central) instead, unless you are using this plugin as a dependency (i.e when using nightclub)
 
 # resources
 ### Allows plugins to compile a resource pack completely on the server, and serves any resource pack to players!

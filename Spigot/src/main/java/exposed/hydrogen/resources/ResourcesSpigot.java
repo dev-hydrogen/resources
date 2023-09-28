@@ -30,7 +30,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class ResourcesSpigot extends JavaPlugin {
     @Getter private static ResourcesSpigot instance;
     private SpigotChameleon chameleon;
-
     @Override
     public void onEnable() {
         instance = this;
@@ -53,6 +52,6 @@ public class ResourcesSpigot extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        chameleon.onDisable();
+        chameleon = null;
     }
 }

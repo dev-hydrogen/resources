@@ -34,7 +34,6 @@
     <modules>
         <module>Core</module>
         <module>Spigot</module>
-        <module>Minestom</module>
         <module>Assemble</module>
         <module>Velocity</module>
     </modules>
